@@ -1,15 +1,20 @@
 name: Auditoria Estatica
-on: [push, pull_request]
+on: [push, pull_request] # Se ejecuta en cada push o PR
+
 jobs:
- audit:
- runs-on: ubuntu-latest
- steps:
- - uses: actions/checkout@v3
- - name: Setup .NET
- uses: actions/setup-dotnet@v3
- with:
- dotnet-version: '8.0.x'
- - name: Restore
- run: dotnet restore
- - name: Build with analyzers
- run: dotnet build --no-restore 
+  audit-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v3
+
+      - name: Configurar .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restaurar dependencias
+        run: dotnet restore
+
+      - name: Ejecutar Script de Auditoria
+        run: pwsh ./audit-script.ps1
