@@ -3,32 +3,34 @@ using System;
 namespace DemoAuditApp
 {
     /// <summary>
-    /// Clase principal que gestiona el acceso de usuarios basado en la edad.
-    /// Cumple con los estándares de seguridad y documentación IEEE 1028.
+    /// Clase principal que gestiona el acceso de usuarios.
+    /// Implementada siguiendo estándares de calidad y seguridad IEEE 1028.
     /// </summary>
     public class Program
     {
         /// <summary>
-        /// Punto de entrada de la aplicación.
+        /// Punto de entrada principal de la aplicación.
+        /// Realiza la lectura de edad con validación de nulidad y formato.
         /// </summary>
-        /// <param name="args">Argumentos de línea de comandos.</param>
+        /// <param name="args">Argumentos de la línea de comandos.</param>
         public static void Main(string[] args)
         {
-            Console.WriteLine("--- Sistema de Validación de Acceso ---");
+            Console.WriteLine("--- Auditoría de Sistemas: Verificación de Acceso ---");
             Console.WriteLine("Ingrese su edad:");
 
             try
             {
-                string input = Console.ReadLine();
+                // Solución al error CS8600: Se usa 'string?' para permitir nulos 
+                // o se maneja el valor predeterminado para asegurar que 'input' no sea nulo.
+                string? input = Console.ReadLine();
 
-                // Validación de entrada: SE-01 (Seguridad)
-                // Se usa TryParse para evitar excepciones por formato incorrecto
+                // Validación de entrada (Atiende Hallazgo de Seguridad SE-01)
                 if (int.TryParse(input, out int edad))
                 {
-                    // Lógica robusta: Verificación de rangos válidos
-                    if (edad < 0 || edad > 120)
+                    // Lógica reforzada para rangos de edad
+                    if (edad < 0 || edad > 125)
                     {
-                        Console.WriteLine("Error: La edad ingresada no es válida.");
+                        Console.WriteLine("Error: La edad ingresada está fuera de un rango lógico.");
                     }
                     else if (edad >= 18)
                     {
@@ -36,22 +38,22 @@ namespace DemoAuditApp
                     }
                     else
                     {
-                        Console.WriteLine("Acceso denegado: Debe ser mayor de edad.");
+                        Console.WriteLine("Acceso denegado: Menor de edad.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Error: Debe ingresar un número entero válido.");
+                    // Manejo de datos no numéricos
+                    Console.WriteLine("Error: La entrada no es un número entero válido.");
                 }
             }
             catch (Exception ex)
             {
-                // Manejo de excepciones: SE-02 (Seguridad)
-                // Previene el cierre inesperado de la aplicación
-                Console.WriteLine($"Ocurrió un error inesperado: {ex.Message}");
+                // Manejo de excepciones (Atiende Hallazgo de Seguridad SE-02)
+                Console.WriteLine($"Se produjo un error inesperado durante la ejecución: {ex.Message}");
             }
-            
-            Console.WriteLine("Presione cualquier tecla para salir.");
+
+            Console.WriteLine("\nPresione cualquier tecla para cerrar la aplicación...");
             Console.ReadKey();
         }
     }
